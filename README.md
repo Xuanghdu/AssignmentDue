@@ -1,3 +1,2 @@
 # NewHacks
-# Arthurs: Han, Jason, Charlie
-# 
+# Arthurs: Han, Jason, Yunhao, 
