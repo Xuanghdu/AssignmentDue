@@ -9,8 +9,8 @@ class User:
 
     def __str__(self):
         return "The username is " + str(self.user) + \
-            ". \nThe password is"+ str(self.password) + \
-            ". \nThe user belongs to the group" + str(self.groups)
+            ". \nThe password is " + str(self.password) + \
+            ". \nThe user belongs to the group: " + str(self.groups)
 
     def change_username(self, old, new):
         self.user = new
