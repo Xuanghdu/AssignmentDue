@@ -8,6 +8,11 @@ class Task:
         self.due_date = due_date
         self.stakeholders = stakeholders
 
+    def __iter__(self):
+        for dep in self.stakeholders:
+            for user in dep:
+                yield user
+
     def add_dependency(self, user1, user2):
         '''(Task, User, User) -> None'''
         index1, index2 = -1, -1
