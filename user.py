@@ -24,3 +24,13 @@ class User(Base):
 
     def password_match(self, attempt):
         return self.password == hash(attempt)
+
+    def load_json_dict(self, json_dict):
+        self.user = json_dict["user"]
+        self.password = json_dict["password"]
+        self.groups = json_dict["groups"]
+
+    def dump_json_dict(self):
+        return {"user": self.user,
+                "password": self.password,
+                "groups": self.groups}

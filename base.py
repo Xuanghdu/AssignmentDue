@@ -16,14 +16,8 @@ class Base:
         assert(self.uuid not in Base.uuid_to_object)
         Base.uuid_to_object[self.uuid] = self
 
-    def get_properties_dict(self):
+    def load_json_dict(self, json_dict):
         raise NotImplementedError()
 
-    def loads(self, s):
-        json_data = json.loads(s)
-        properties_dict = self.get_properties_dict()
-        for key in properties_dict:
-            properties_dict[key] = json_data[key]
-
-    def dumps(self, fp):
-        return json.dumps(self.get_properties_dict())
+    def dump_json_dict(self):
+        raise NotImplementedError()

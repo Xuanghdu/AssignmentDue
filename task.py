@@ -1,8 +1,12 @@
-class Task:
+from base import Base
+
+
+class Task(Base):
 
     __slots__ = 'group', 'content', 'due_date', 'stakeholders'
 
     def __init__(self, group, content, due_date=None, stakeholders=[]):
+        super.__init__()
         self.group = group
         self.content = content
         self.due_date = due_date
@@ -54,3 +58,15 @@ class Task:
         if index < 0:
             raise Exception('User should not have access of the task')
         del self.stakeholders[index]
+
+    def load_json_dict(self, load_json_dict):
+        self.group = load_json_dict["group"]
+        self.content = load_json_dict["content"]
+        self.due_date = load_json_dict["due_date"]
+        self.stakeholders = load_json_dict["stakeholders"]
+
+    def dump_json_dict(self):
+        return {"group": self.group,
+                "content": self.content,
+                "due_date": self.due_date,
+                "stakeholders", self.stakeholders}
