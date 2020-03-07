@@ -3,21 +3,21 @@ from base import Base
 
 class User(Base):
 
-    __slots__ = 'user', 'password', 'groups'
+    __slots__ = 'username', 'password', 'groups'
 
     def __init__(self, username, password, groups=[]):
         super.__init__()
-        self.user = username
+        self.username = username
         self.password = hash(password)
         self.groups = groups
 
     def __str__(self):
-        return "The username is " + str(self.user) + \
+        return "The username is " + str(self.username) + \
             ". \nThe password is " + str(self.password) + \
             ". \nThe user belongs to the group: " + str(self.groups)
 
     def change_username(self, old, new):
-        self.user = new
+        self.username = new
 
     def change_password(self, old, new):
         self.password = new
@@ -26,11 +26,11 @@ class User(Base):
         return self.password == hash(attempt)
 
     def load_json_dict(self, json_dict):
-        self.user = json_dict["user"]
+        self.username = json_dict["username"]
         self.password = json_dict["password"]
         self.groups = json_dict["groups"]
 
     def dump_json_dict(self):
-        return {"user": self.user,
+        return {"username": self.username,
                 "password": self.password,
                 "groups": self.groups}
