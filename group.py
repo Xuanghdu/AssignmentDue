@@ -29,9 +29,9 @@ class Group:
         '''
         update the user_to_task dictionary
         '''
-        # for task in tasks:
-        #     for user in task.stakeholders:
-        #         user_to_task
+        for task in self.tasks:
+            for user in task.stakeholders:
+                self.user_to_task[user].add(task)
 
 
     def __str__(self):
