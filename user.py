@@ -1,8 +1,12 @@
-class User:
+from base import Base
+
+
+class User(Base):
 
     __slots__ = 'user', 'password', 'groups'
 
-    def __init__(self, username, password, groups=set()):
+    def __init__(self, username, password, groups=[]):
+        super.__init__()
         self.user = username
         self.password = hash(password)
         self.groups = groups
