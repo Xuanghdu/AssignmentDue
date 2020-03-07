@@ -1,4 +1,7 @@
 class User:
+
+    __slots__ = 'user', 'password', 'groups'
+
     def __init__(self, username, password, groups=None):
         self.user = username
         self.password = password

@@ -1,4 +1,7 @@
 class Group:
+
+    __slots__ = 'tasks', 'users', 'user_to_task'
+
     def __init__(self, tasks=set(), users=set()):
         '''
         params:
