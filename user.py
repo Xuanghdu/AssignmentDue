@@ -2,7 +2,7 @@ class User:
 
     __slots__ = 'user', 'password', 'groups'
 
-    def __init__(self, username, password, groups=None):
+    def __init__(self, username, password, groups=set()):
         self.user = username
         self.password = password
         self.groups = groups
@@ -17,3 +17,6 @@ class User:
 
     def change_password(self, old, new):
         self.password = new
+
+    def password_match(self, attempt):
+        return self.password == attempt
