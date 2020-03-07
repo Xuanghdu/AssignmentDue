@@ -31,6 +31,8 @@ class Group:
         '''
         for task in self.tasks:
             for user in task.stakeholders:
+                if user not in self.user_to_task.keys():
+                    self.user_to_task[user] = set()
                 self.user_to_task[user].add(task)
 
 
