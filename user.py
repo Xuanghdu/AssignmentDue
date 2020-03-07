@@ -4,7 +4,7 @@ class User:
 
     def __init__(self, username, password, groups=set()):
         self.user = username
-        self.password = password
+        self.password = hash(password)
         self.groups = groups
 
     def __str__(self):
@@ -19,4 +19,4 @@ class User:
         self.password = new
 
     def password_match(self, attempt):
-        return self.password == attempt
+        return self.password == hash(attempt)
