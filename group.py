@@ -37,4 +37,6 @@ class Group:
 
 
     def __str__(self):
-        return "tasks:" + self.tasks + "\n" + "users:" + self.users + "\n" + "user_to_task:"
+        return "tasks:" + str(self.tasks) + \
+             "\nusers:" + str(self.users) + \
+      "\nuser_to_task:" + str(self.user_to_task)
