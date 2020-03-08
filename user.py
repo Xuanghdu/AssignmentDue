@@ -44,9 +44,9 @@ class User():
         else:
             print(user.username + " is already in " + group.groupname)
 
-    def create_task(self, group, task):
+    def add_task(self, group, task):
         # if task not in group.tasks:
-            group.create_task(task)
+            group.add_task(task)
         # else:
             # print(task.taskname + " is already in " + group.groupname)
 

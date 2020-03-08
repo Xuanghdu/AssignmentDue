@@ -12,7 +12,7 @@ class Group:
     def add_user(self, user):
         self.users.append(user)
 
-    def create_task(self, task):
+    def add_task(self, task):
         self.tasks.append(task)
 
     def complete_task(self, task, user):

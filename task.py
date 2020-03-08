@@ -54,6 +54,7 @@ class Task():
             # neither user is in the task
             self.divisions.append({user1, user2})
 
+    # Remove???
     def finish_task(self, user):
         '''(Task, User) -> None'''
         index = -1
