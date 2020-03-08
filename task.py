@@ -59,14 +59,14 @@ class Task(Base):
             raise Exception('User should not have access of the task')
         del self.stakeholders[index]
 
-    def load_json_dict(self, load_json_dict):
-        self.group = load_json_dict["group"]
-        self.content = load_json_dict["content"]
-        self.due_date = load_json_dict["due_date"]
-        self.stakeholders = load_json_dict["stakeholders"]
+    # def load_json_dict(self, load_json_dict):
+    #     self.group = load_json_dict["group"]
+    #     self.content = load_json_dict["content"]
+    #     self.due_date = load_json_dict["due_date"]
+    #     self.stakeholders = load_json_dict["stakeholders"]
 
-    def dump_json_dict(self):
-        return {"group": self.group,
-                "content": self.content,
-                "due_date": self.due_date,
-                "stakeholders", self.stakeholders}
+    # def dump_json_dict(self):
+    #     return {"group": self.group,
+    #             "content": self.content,
+    #             "due_date": self.due_date,
+    #             "stakeholders", self.stakeholders}
