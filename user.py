@@ -27,12 +27,22 @@ class User():
         else:
             print("Incorrect old password!")
 
-    def password_match(self, attempt):
+    def check_password(self, attempt):
         return self.password == hash(attempt)
 
     def enter_group(self, group):
         self.groups.append(group)
         group.add_user(self)
+
+    def invite(self, user, group):
+        user.groups.append(group)
+        group.add_user(user)
+
+    def create_task(self, group, task):
+        group.create_task(task)
+
+    def complete_task(self, group, task):
+        group.complete_task(task)
 
 
     # def load_json_dict(self, json_dict):
