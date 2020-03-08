@@ -16,7 +16,7 @@ class Task():
         self.dependencies = dependencies
         now = datetime.now()
         self.timestamp = datetime.timestamp()
-        self.add_date = tuple(now.utctimetuple())[:5]
+        self.add_date = now.utctimetuple()[:5]
 
     def __iter__(self):
         for dep in self.divisions:
