@@ -2,74 +2,71 @@ from base import Base
 from user import User
 # from task import Task
 from group import Group
+import os
 
-def check_username(database):
+def signin(username_to_users):
     while True:
         username = input('username: ')
-        if username in database['users']:
-            user = User(username,database['users'][username]['password'],)
-            break
+        password = input('password: ')
+        if username not in username_to_users :
+            print('Invalid username or password')
         else:
-            print('user_name not valid')
-    '''TODO: return user,username'''    
+            user = username_to_users[username]
+            if not user.check_password(password):
+                print('Invalid username or password')
 
-def MATCH(password):
-    return password == passwords[0] 
-    # user.password_match(password)
+            else: break
+        
+    return user
 
-# '''目前预设以下值'''
-# database = {
-#     'Users':['Jason','Zuo']
-# }
-
-import json
-file_location = ""
-database =  json.loads(file_location)
-
-
-while True:
-    print("Welcome to ...")
-    print("1.register")
-    print("2.log in")
-    print("3.exit")
-    choice = input("choose a number:\n")
-
-    if choice == '1':
-        '''TODO: this part is currently malfunctional'''
-        user_name = input('user_name: ')
+def register(username_to_users):
+    while True:
+        while True:
+            username = input('username: ')
+            if username in username_to_users:
+                print('Sorry, this username has already been taken!')
+            else: break
         while True:
             password = input('password: ')
             confirm_password = input('confirm_password: ')
             if password!=confirm_password: 
                 print('Password does not match, please type again')
             else: break
-            print('registering user...')
-            '''code for registering required'''
 
+        while True:
+            print('username: ',username)
+            print('password: ',password)
+            print('1. Confirm')
+            print('2. Deny')
+            confirm = input('')
+            if confirm == '1': return user_name,password
+            elif confirm == '2': break
+            else: continue
+         
+
+username_to_users = dict{'name': 1}
+groupname_to_group = dict{'groupname':'g'}
+current_user = None
+
+while True:
+    print("Welcome to Assignment Due")
+    print("1.register")
+    print("2.log in")
+    print("3.exit")
+    choice = input("choose a number:\n")
+
+    if choice == '1':
+        username,password = register(username_to_users)
+        current_user = User(username,password)
     elif choice == '2':
-        '''Obtain the user and his relative groups and task'''
-        user,username =check_username()
-        #tasks
-        #group
-        ''''''
-
-
-
-        
-        while not MATCH():
-                print('Access Denied, please try again.')
-                print(' 1. Change username')
-                print(' 2. Change password')
-                change_user_name = input()
-                if change_user_name == '1':
-                    user,username =check_user_name()
-                elif change_user_name == '2':
-                    password = input('password: ')
-                else:
-                    print('Please make a valid choice:')
-        
-
-    else:
-        break
+        current_user = signin(username_to_users)
+        os.system('clear')
+        print("Welcome,", current_user.username)
+        i = 1
+        for group in current_user.groups:
+            print(str(i)+'.',group.groupname)
+            i+=1
+        print('settings')
+    else: break
 
 
