@@ -30,5 +30,5 @@ def display_login_page():
 
 
 if __name__ == "__main__":
-    display_login_or_register_page()
+    # display_login_or_register_page()
     display_login_page()
