@@ -31,6 +31,7 @@ class Group:
         self.deleted.append(task)
 
     def restore_task(self, task):
+        # TODO: cannot restore from completion
         self.deleted.remove(task)
         self.tasks.append(task)
 
