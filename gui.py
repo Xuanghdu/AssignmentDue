@@ -176,21 +176,48 @@ def display_group_page():
         window.destroy()
     window = Tk()
     window.title(group.groupname)
+    row_count = 0
     for task in group.tasks:
         Button(text=task.taskname,
-               command=lambda: task_button_pressed(task)).grid()
+               command=lambda: task_button_pressed(task)).grid(
+                   row=row_count, column=0, columnspan=3)
+        row_count += 1
+    Button(text="Create task", command=display_create_task_page).grid(
+        row=row_count, column=0)
+    Button(text="Invite", command=display_invite_page).grid(
+        row=row_count, column=1)
+    Button(text="Back", command=group_page_back_pressed).grid(
+        row=row_count, column=2)
     window.mainloop()
 
 
+def group_page_back_pressed():
+    global navigation_stack
+    assert(isinstance(navigation_stack[-1], Group))
+    navigation_stack.pop()
+    display_user_page()
+
+
 def task_button_pressed(task):
+    global navigation_stack
+    assert(isinstance(navigation_stack[-1], Group))
+    navigation_stack.append(task)
+    display_task_page()
+
+
+def display_create_task_page():
+    pass
+
+
+def display_invite_page():
     pass
 
 
 def display_task_page():
-    pass
+    global navigation_stack
+    assert(isinstance(navigation_stack[-1], Group))
+    group = 
 
 
 if __name__ == "__main__":
     display_login_or_register_page()
-    # display_login_page()
-    # display_register_page()
