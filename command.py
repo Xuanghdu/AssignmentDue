@@ -60,22 +60,24 @@ def main_page():
                 i+=1
             print("Options: ")
             print(" 1. Choose a Group")
-            print(" 2. Create a Group")
-            print(" 3. Settings")
-            print(" 4. Log Out")
-            option = input('Enter an option')
+            print(" 2. New Group")
+            print(" 3. Delete Group")
+            print(" 4. Settings")
+            print(" 5. Log Out")
+            option = input('Enter an option: ')
             if   option == "1": choose_group()
-            elif option == "2": create_group()
-            elif option == "3": the_settings()
-            elif option == "4": exit()
+            elif option == "2": new_group()
+            elif option == "3": delete_group()
+            elif option == "4": the_settings()
+            elif option == "5": exit()
             else: print('Please Enter a valid option:'); continue
         else:
             print("Options: ")
-            print(" 1. Create a Group")
+            print(" 1. New Group")
             print(" 2. Settings")
             print(" 3. Log Out")
-            option = input('Enter an option')
-            if   option == "1": create_group()
+            option = input('Enter an option: ')
+            if   option == "1": new_group()
             elif option == "2": the_settings()
             elif option == "3": exit()
             else: print('Please Enter a valid option:'); continue
@@ -298,13 +300,100 @@ def create_task(taskname = None, due_date = [], description = None, divisions = 
                 break
         elif option == "6":
             return
-        else: print('Please Enter a valid option:'); continue
+        else: print('Please enter a valid option:'); continue
 
-def create_group():
-    pass
+def new_group():
+    while True:
+        print("Options: ")
+        print(" 1. Create a group")
+        print(" 2. Enter a group")
+        print(" 3. Return to main page")
+        choice = input("Enter an option: ")
+        if choice == '1':
+            while True:
+                new_groupname = input('New Groupname:')
+                if new_groupname == '':break
+                elif new_groupname not in groupname_to_group:
+                    new_group = Group(new_groupname)
+                    new_group.add_user(current_user)
+                    groupname_to_group[new_groupname] = new_group
+                    return
+                else:
+                    print('The groupname exists or is in valid, please try again or press Enter to return.')
+        elif choice == '2':
+            while True:
+                e_groupname = input('Groupname:')
+                if e_groupname == '': break
+                elif e_groupname in groupname_to_group:
+                    current_user.enter_group(groupname_to_group[e_groupname])
+                    return
+                else:
+                    print('Please enter an existing groupname or press Enter to return.')
+
+        elif choice == '3':
+            return 
+        else:
+            print('Please enter a valid option:')
+            continue
+
+def delete_group()
+    while True:
+        print("Groups: ")
+        i = 1
+        for group in current_user.groups:
+            print(' '+str(i)+'.',group.groupname)
+            i+=1
+        group_num = input('Please enter the number of the group to be deleted: ')
+        if group_num == '': return
+        try:
+            read_only_group = current_user.groups[int(group_num)]
+        except:
+            print('Please enter a valid group number or press Enter to exit.')
+            continue
+        dl_group_name = current_user.groups.pop(group_num)
+        del groupname_to_group[dl_group_name]
+        return 
+
+
 def the_settings():
-    # TODO: change user, change password
-    pass
+    while True:
+        print("Options: ")
+        print(" 1. Change username")
+        print(" 2. Change password")
+        print(" 3. Return to main page")
+        choice = input("Enter an option: ")
+        if choice == '1':
+            while True:
+                new_username = input('Enter the modified username')
+                if new_username == '': break
+                elif new_username not in username_to_user:
+                    old_ = current_user.username
+                    current_user.change_username(new_username)
+                    username_to_user[new_username] = current_user
+                    del username_to_user[old_]
+                    current_user = username_to_user[new_username]
+                    return
+                else:
+                    print('The new username has been occupied, please try again or press Enter to return.')
+
+        elif choice == '2':
+            while True:
+                old_pw = input('Current password:')
+                if currrent_user.check_password(old_pw)
+                    new_pw = input('New password:')
+                    cf_pw = input('confirm password:')
+                    if new_pw != cf_pw:
+                        print('The passwords is inconsistant')
+                        continue
+                    else:
+                        current_user.change_password(old_pw,new_pw)
+                        return
+                else: print('The password is incorrect')
+
+        elif choice == '3':
+            return 
+        else:
+            print('Please enter a valid option:'); continue
 
 
 
@@ -322,7 +411,6 @@ while True:
         current_user = signin()
         main_page()
         
-
     else: break
 
 
