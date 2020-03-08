@@ -2,25 +2,29 @@
 from datetime import datetime
 
 # class Task(Base):
+
+
 class Task():
 
-    __slots__ = 'taskname', 'description', 'group', 'due_date', 'add_date', 'divisions', 'timestamp', 'dependencies'
+    __slots__ = 'taskname', 'description', 'group', 'due_date', 'divisions', \
+        'dependencies', 'timestamp', 'add_date'
 
-    def __init__(self, taskname, description, group, due_date=[], divisions=[set()], dependencies=[]):
+    def __init__(self, taskname, description, group, due_date=None,
+                 divisions=[set()], dependencies=[]):
         # super.__init__()
         self.taskname = taskname
         self.description = description
-        self.due_date = due_date
         self.group = group
+        self.due_date = due_date
         self.divisions = divisions
         self.dependencies = dependencies
         now = datetime.now()
-        self.timestamp = datetime.timestamp()
+        self.timestamp = now.timestamp()
         self.add_date = now.utctimetuple()[:5]
 
     def __iter__(self):
-        for dep in self.divisions:
-            for user in dep:
+        for division in self.divisions:
+            for user in division:
                 yield user
 
     def add_dependency(self, user1, user2):
@@ -55,7 +59,7 @@ class Task():
             self.divisions.append({user1, user2})
 
     # Remove???
-    def finish_task(self, user):
+    def complete_task(self, user):
         '''(Task, User) -> None'''
         index = -1
         for i in range(self.divisions):
