@@ -4,6 +4,8 @@ from user import User
 from group import Group
 from task import Task
 
+geometry_string = "300x200"
+
 username_to_user = {}
 groupname_to_group = {}
 
@@ -16,9 +18,14 @@ def display_login_or_register_page():
     if window != None:
         window.destroy()
     window = Tk()
+    Grid.rowconfigure(window, 0, weight=1)
+    Grid.rowconfigure(window, 0, weight=1)
+    Grid.columnconfigure(window, 0, weight=1)
+    Grid.columnconfigure(window, 0, weight=1)
+    window.geometry(geometry_string)
     window.title("Login or Register")
-    Button(text="Login", command=display_login_page).pack()
-    Button(text="Register", command=display_register_page).pack()
+    Button(text="Login", command=display_login_page).grid(row=0, column=0)
+    Button(text="Register", command=display_register_page).grid(row=1, column=1)
     window.mainloop()
 
 
@@ -27,6 +34,12 @@ def display_login_page():
     if window != None:
         window.destroy()
     window = Tk()
+    Grid.rowconfigure(window, 0, weight=1)
+    Grid.rowconfigure(window, 1, weight=1)
+    Grid.rowconfigure(window, 2, weight=1)
+    Grid.columnconfigure(window, 0, weight=1)
+    Grid.columnconfigure(window, 1, weight=1)
+    window.geometry(geometry_string)
     window.title("Login")
     username = StringVar()
     password = StringVar()
@@ -52,6 +65,8 @@ def login_pressed(username, password):
         messagebox.showinfo("Login failed", "Username not found")
         return
     user = username_to_user[username]
+    print("user: {} id: {} groups: {}".format(
+        user.username, id(user), id(user.groups)))
     if not user.check_password(password):
         messagebox.showinfo("Login failed", "Incorrect password")
         return
@@ -64,6 +79,13 @@ def display_register_page():
     if window != None:
         window.destroy()
     window = Tk()
+    Grid.rowconfigure(window, 0, weight=1)
+    Grid.rowconfigure(window, 1, weight=1)
+    Grid.rowconfigure(window, 2, weight=1)
+    Grid.rowconfigure(window, 3, weight=1)
+    Grid.columnconfigure(window, 0, weight=1)
+    Grid.columnconfigure(window, 1, weight=1)
+    window.geometry(geometry_string)
     window.title("Register")
     username = StringVar()
     password = StringVar()
@@ -109,6 +131,9 @@ def display_user_page():
     if window != None:
         window.destroy()
     window = Tk()
+    Grid.columnconfigure(window, 0, weight=1)
+    Grid.columnconfigure(window, 1, weight=1)
+    window.geometry(geometry_string)
     window.title(user.username)
     row_count = 0
     for group in user.groups:
@@ -143,20 +168,26 @@ def display_create_group_page(user):
     if window != None:
         window.destroy()
     window = Tk()
+    Grid.rowconfigure(window, 0, weight=1)
+    Grid.rowconfigure(window, 1, weight=1)
+    Grid.columnconfigure(window, 0, weight=1)
+    Grid.columnconfigure(window, 1, weight=1)
+    window.geometry(geometry_string)
     window.title("Create Group")
     groupname = StringVar()
     Label(text="Groupname:").grid(row=0, column=0)
     Entry(textvariable=groupname).grid(row=0, column=1)
     Button(text="Create Group", command=lambda: create_group_pressed(
-        user, groupname.get())).grid(row=1, column=0)
+        groupname.get())).grid(row=1, column=0)
     Button(text="Cancel", command=display_user_page).grid(row=1, column=1)
     window.mainloop()
 
 
-def create_group_pressed(user, groupname):
+def create_group_pressed(groupname):
     global navigation_stack
     global groupname_to_group
     assert(isinstance(navigation_stack[-1], User))
+    user = navigation_stack[-1]
     if groupname in groupname_to_group:
         messagebox.showinfo("Create group failed",
                             "Group name has been used by another group")
@@ -175,19 +206,26 @@ def display_group_page():
     if window != None:
         window.destroy()
     window = Tk()
+    Grid.columnconfigure(window, 0, weight=1)
+    Grid.columnconfigure(window, 1, weight=1)
+    Grid.columnconfigure(window, 2, weight=1)
+    Grid.columnconfigure(window, 3, weight=1)
+    window.geometry(geometry_string)
     window.title(group.groupname)
     row_count = 0
     for task in group.tasks:
         Button(text=task.taskname,
                command=lambda: task_button_pressed(task)).grid(
-                   row=row_count, column=0, columnspan=3)
+                   row=row_count, column=0, columnspan=4)
         row_count += 1
     Button(text="Create task", command=display_create_task_page).grid(
         row=row_count, column=0)
-    Button(text="Invite", command=display_invite_page).grid(
+    Button(text="Users", command=display_group_users_page).grid(
         row=row_count, column=1)
-    Button(text="Back", command=group_page_back_pressed).grid(
+    Button(text="Invite", command=display_invite_page).grid(
         row=row_count, column=2)
+    Button(text="Back", command=group_page_back_pressed).grid(
+        row=row_count, column=3)
     window.mainloop()
 
 
@@ -212,6 +250,12 @@ def display_create_task_page():
     if window != None:
         window.destroy()
     window = Tk()
+    Grid.rowconfigure(window, 0, weight=1)
+    Grid.rowconfigure(window, 1, weight=1)
+    Grid.rowconfigure(window, 2, weight=1)
+    Grid.columnconfigure(window, 0, weight=1)
+    Grid.columnconfigure(window, 1, weight=1)
+    window.geometry(geometry_string)
     window.title("Create Task")
     taskname = StringVar()
     description = StringVar()
@@ -226,6 +270,23 @@ def display_create_task_page():
         taskname.get(), description.get(), due_date.get())).grid(
             row=3, column=0)
     Button(text="Cancel", command=display_group_page).grid(row=3, column=1)
+    window.mainloop()
+
+
+def display_group_users_page():
+    global window
+    assert(isinstance(navigation_stack[-1], Group))
+    group = navigation_stack[-1]
+    if window != None:
+        window.destroy()
+    window = Tk()
+    window.geometry(geometry_string)
+    window.title("Users of {}".format(group))
+    box = Listbox()
+    for user in group.users:
+        box.insert(END, user.username)
+    box.pack()
+    Button(text="Back", command=display_group_page).pack()
     window.mainloop()
 
 
@@ -259,6 +320,11 @@ def display_invite_page():
     if window != None:
         window.destroy()
     window = Tk()
+    Grid.rowconfigure(window, 0, weight=1)
+    Grid.rowconfigure(window, 1, weight=1)
+    Grid.columnconfigure(window, 0, weight=1)
+    Grid.columnconfigure(window, 1, weight=1)
+    window.geometry(geometry_string)
     window.title("Invite")
     username = StringVar()
     Label(text="Username:").grid(row=0, column=0)
@@ -295,6 +361,12 @@ def display_task_page():
     if window != None:
         window.destroy()
     window = Tk()
+    Grid.rowconfigure(window, 0, weight=1)
+    Grid.rowconfigure(window, 1, weight=1)
+    Grid.rowconfigure(window, 2, weight=1)
+    Grid.columnconfigure(window, 0, weight=1)
+    Grid.columnconfigure(window, 1, weight=1)
+    window.geometry(geometry_string)
     window.title(task.taskname)
     Label(text="Taskname:").grid(row=0, column=0)
     Label(text=task.taskname).grid(row=0, column=1)

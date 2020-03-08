@@ -8,11 +8,14 @@ class User():
 
     __slots__ = 'username', 'password', 'groups'
 
-    def __init__(self, username, password, groups=[]):
+    def __init__(self, username, password, groups=None):
         # super.__init__()
         self.username = username
         self.password = hash(password)
-        self.groups = groups
+        if groups == None:
+            self.groups = []
+        else:
+            self.groups = groups
 
     def __str__(self):
         return "The username is " + str(self.username) + \
