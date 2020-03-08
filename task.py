@@ -76,7 +76,8 @@ class Task():
 
     def __str__(self):
         return 'taskname: %s\ndescription: %s\ndue date: %s\nadd date: %S' % \
-            (self.taskname, self.description, '/'.join(self.due_date), self.add_date)
+            (self.taskname, self.description,
+             '/'.join(self.due_date), self.add_date)
 
     # def load_json_dict(self, load_json_dict):
     #     self.group = load_json_dict["group"]
