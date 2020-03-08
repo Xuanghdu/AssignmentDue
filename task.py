@@ -70,6 +70,10 @@ class Task():
             raise Exception('User should not have access of the task')
         del self.divisions[index]
 
+    def __str__(self):
+        return 'taskname: %s\ndescription: %s\ndue date: %S\nadd date: %S' % \
+            (self.taskname, self.description, self.due_date, self.add_date)
+
     # def load_json_dict(self, load_json_dict):
     #     self.group = load_json_dict["group"]
     #     self.content = load_json_dict["content"]
