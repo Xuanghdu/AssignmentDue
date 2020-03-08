@@ -48,26 +48,37 @@ def signin():
 
 def main_page():
     while True:
-        if current_group:
-            current_group = None
+        # if current_group:
+        current_group = None
         os.system('clear')
         print("Welcome,", current_user.username)
-        print("Groups: ")
-        i = 1
-        for group in current_user.groups:
-            print(' '+str(i)+'.',group.groupname)
-            i+=1
-        print("Options: ")
-        print(" 1. Choose a Group")
-        print(" 2. Create a Group")
-        print(" 2. Settings")
-        print(" 3. Log Out")
-        option = input('Enter an option')
-        if   option == "1": choose_group()
-        elif option == "2": create_group()
-        elif option == "3": the_settings()
-        elif option == "4": exit()
-        else: print('Please Enter a valid option:'); continue
+        if current_user.groups != []:
+            print("Groups: ")
+            i = 1
+            for group in current_user.groups:
+                print(' '+str(i)+'.',group.groupname)
+                i+=1
+            print("Options: ")
+            print(" 1. Choose a Group")
+            print(" 2. Create a Group")
+            print(" 3. Settings")
+            print(" 4. Log Out")
+            option = input('Enter an option')
+            if   option == "1": choose_group()
+            elif option == "2": create_group()
+            elif option == "3": the_settings()
+            elif option == "4": exit()
+            else: print('Please Enter a valid option:'); continue
+        else:
+            print("Options: ")
+            print(" 1. Create a Group")
+            print(" 2. Settings")
+            print(" 3. Log Out")
+            option = input('Enter an option')
+            if   option == "1": create_group()
+            elif option == "2": the_settings()
+            elif option == "3": exit()
+            else: print('Please Enter a valid option:'); continue
 
 
 def choose_group():
@@ -81,43 +92,135 @@ def choose_group():
         else:
             while True:
                 current_group = groupname_to_group[groupname]
-                print('Tasks in',current_group,'are:')
-                for t_ in current_group.tasks:
-                    print(t_.taskname)
+                if current_group.tasks == []: print("All the tasks are done, yay!")
+                else:
+                    print('Tasks in',current_group.groupname,'are:')
+                    for i_,t_ in enumerate(current_group.tasks):
+                        print(' ',str(i_),'.',t_.taskname)
                 print("Options: ")
                 print(" 1. Create a task")
                 print(" 2. View a task")
                 print(" 3. Complete a task")
                 print(" 4. Remove a task")
-                print(" 5. Restore a task")
-                print(" 6. Return to main page")
+                print(" 5. Return to main page")
                 option = input("Enter an option: ") 
                 if option == "1": 
                     create_task()
-                elif: pass
-                # TODO: finish 2-5
-                elif option == "6": return
+                elif current_group.tasks == []: 
+                    print("All the tasks are done, yay!")
+                    continue
+                elif option == '2': 
+                    op_task = None
+                    while op_task!='3':
+                        print('Tasks in',current_group.groupname,'are:')
+                        for i_,t_ in enumerate(current_group.tasks):
+                            print(' ',str(i_),'.',t_.taskname)
+                        task_num = input('Enter a task number: ')
+                        if task_num == '': break
+                        try:
+                            read_only_task = current_group.tasks[task_num]
+                        except:
+                            print('Please enter a valid task number or press Enter to return.')
+                            continue
+                        print(read_only_task)
+                        print('The task information is as the above,')
+                        while True:
+                            print("Options: ")
+                            print(" 1. Modify this task")
+                            print(" 2. View another task")
+                            print(" 3. Return to group page")
+                            op_task = input('Enter an option: ')
+                            if op_task == "1":
+                                t_name = read_only_task.taskname
+                                t_due_date = read_only_task.due_date
+                                t_description = read_only_task.description
+                                t_divisions = read_only_task.divisions 
+                                t_add_date = read_only_task.add_date
+                                create_task(t_name, t_due_date, t_description, t_divisions, t_add_date)
+                            elif op_task == '2':
+                                break
+                            elif op_task == '3': 
+                                break
+                            else: 
+                                print('Please enter a valid option: ')
+
+                elif option == '3':
+                    if current_group.tasks == []: 
+                        print("All the tasks are done, yay!")
+                        continue
+                    cp_task = None
+                    while cp_task != '2':
+                        print('Tasks in',current_group.groupname,'are:')
+                        for i_,t_ in enumerate(current_group.tasks):
+                            print(' ',str(i_),'.',t_.taskname)
+                        task_num = input('Enter a task number: ')
+                        if task_num == '': break
+                        try:
+                            read_only_task = current_group.tasks[task_num]
+                        except:
+                            print('Please enter a valid task number or press Enter to return.')
+                            continue
+                        current_group.complete_task(read_only_task,current_user)
+                        while True:                         
+                            print("Options: ")
+                            print(" 1. Complete another task")
+                            print(" 2. Return to group page")
+                            cp_task = input('Enter an option: ')
+                            if cp_task in '12':
+                                break
+                            else:
+                                print("Please enter a valid option: ")
+
+                elif option == '4':
+                    if current_group.tasks == []: 
+                        print("All the tasks are done, yay!")
+                        continue
+                    rm_task = None
+                    while rm_task != '2':
+                        print('Tasks in',current_group.groupname,'are:')
+                        for i_,t_ in enumerate(current_group.tasks):
+                            print(' ',str(i_),'.',t_.taskname)
+                        task_num = input('Enter a task number: ')
+                        if task_num == '': break
+                        try:
+                            read_only_task = current_group.tasks[task_num]
+                        except:
+                            print('Please enter a valid task number or press Enter to return.')
+                            continue
+                        current_group.delete_task(read_only_task)
+                        while True:                         
+                            print("Options: ")
+                            print(" 1. Remove another task")
+                            print(" 2. Return to group page")
+                            rm_task = input('Enter an option: ')
+                            if rm_task in '12':
+                                break
+                            else:
+                                print("Please enter a valid option: ")
+
+                elif option == "5": return
                 else: print('Please Enter a valid option:'); continue
             
-def create_task():
-    taskname = None
-    due_date = None
-    description = None 
-    divisions = []
+def create_task(taskname = None, due_date = [], description = None, divisions = [],add_date=None):
+    if taskname != None:
+        for task in current_group.tasks:
+            if task.taskname == taskname:
+                current_group.delete_task(task)
+                break
     while True:
         print("Options: ")
-        print(" 1. task name: " + str(taskname))
-        print(" 2. due date: " + '/'.join(due_date))
-        print(" 3. description: " + str(description))
-        print(" 4. divisions:\n   " +"\n   ".join(divisions))
-        print(" 5. confirm task")
+        print(" 1. Task name: " + str(taskname))
+        print(" 2. Due date: " + '/'.join(due_date))
+        print(" 3. Description: " + str(description))
+        print(" 4. Divisions:\n   " +"\n   ".join(divisions))
+        print(" 5. Confirm task")
         print(" 6. Return to main group")
         option = input("Enter an option: ") 
         if option == "1":
             while True:
                 new_taskname = input('task name: ')
                 if new_taskname in current_group.tasks:
-                    print("The task "+taskname+" has already existed, please enter a different task.")
+                    print("The task "+new_taskname+" has already existed, please enter a different taskname.")
                 else: 
                     confirm = input('Update task name "'+new_taskname+'"? y/n')
                     if confirm == "y": 
@@ -183,10 +286,13 @@ def create_task():
                     divisions = new_divisions
 
         elif option == "5":
-            confirm = input('Create the task? y/n')
+            confirm = input('Update the task? y/n')
             if confirm == "n": continue 
+            if divisions == []: 
+                print('Must assign divisions to the task')
+                continue
             else:
-                current_task = Task(taskname,description,current_group,due_date,divisions)
+                current_task = Task(taskname,description,current_group,due_date,divisions,add_date = add_date)
                 current_user.add_task(current_group,current_task)
                 current_group.add_task(current_task)
                 break
