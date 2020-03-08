@@ -2,6 +2,8 @@
 import group
 
 # class User(Base):
+
+
 class User():
 
     __slots__ = 'username', 'password', 'groups'
@@ -46,9 +48,9 @@ class User():
 
     def add_task(self, group, task):
         # if task not in group.tasks:
-            group.add_task(task)
+        group.add_task(task)
         # else:
-            # print(task.taskname + " is already in " + group.groupname)
+        # print(task.taskname + " is already in " + group.groupname)
 
     def complete_task(self, group, task):
         group.complete_task(task, self)
