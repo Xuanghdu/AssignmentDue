@@ -5,6 +5,7 @@ from group import Group
 from task import Task
 
 geometry_string = "300x200"
+list_button_width = 200
 
 username_to_user = {}
 groupname_to_group = {}
@@ -19,13 +20,12 @@ def display_login_or_register_page():
         window.destroy()
     window = Tk()
     Grid.rowconfigure(window, 0, weight=1)
-    Grid.rowconfigure(window, 0, weight=1)
-    Grid.columnconfigure(window, 0, weight=1)
+    Grid.rowconfigure(window, 1, weight=1)
     Grid.columnconfigure(window, 0, weight=1)
     window.geometry(geometry_string)
     window.title("Login or Register")
     Button(text="Login", command=display_login_page).grid(row=0, column=0)
-    Button(text="Register", command=display_register_page).grid(row=1, column=1)
+    Button(text="Register", command=display_register_page).grid(row=1, column=0)
     window.mainloop()
 
 
@@ -137,7 +137,7 @@ def display_user_page():
     window.title(user.username)
     row_count = 0
     for group in user.groups:
-        Button(text=group.groupname,
+        Button(text=group.groupname, width=list_button_width,
                command=lambda: group_button_pressed(group)).grid(
                    row=row_count, column=0, columnspan=2)
         row_count += 1
@@ -214,7 +214,7 @@ def display_group_page():
     window.title(group.groupname)
     row_count = 0
     for task in group.tasks:
-        Button(text=task.taskname,
+        Button(text=task.taskname, width=list_button_width,
                command=lambda: task_button_pressed(task)).grid(
                    row=row_count, column=0, columnspan=4)
         row_count += 1
@@ -253,6 +253,7 @@ def display_create_task_page():
     Grid.rowconfigure(window, 0, weight=1)
     Grid.rowconfigure(window, 1, weight=1)
     Grid.rowconfigure(window, 2, weight=1)
+    Grid.rowconfigure(window, 3, weight=1)
     Grid.columnconfigure(window, 0, weight=1)
     Grid.columnconfigure(window, 1, weight=1)
     window.geometry(geometry_string)
