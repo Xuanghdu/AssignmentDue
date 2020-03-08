@@ -1,7 +1,8 @@
-from base import Base
+# from base import Base
+import group
 
-
-class User(Base):
+# class User(Base):
+class User():
 
     __slots__ = 'username', 'password', 'groups'
 
@@ -13,17 +14,26 @@ class User(Base):
 
     def __str__(self):
         return "The username is " + str(self.username) + \
-            ". \nThe password is " + str(self.password) + \
+            ". \nThe hashed password is " + str(self.password) + \
             ". \nThe user belongs to the group: " + str(self.groups)
 
     def change_username(self, old, new):
         self.username = new
+        # TODO: main (command & gui to check if the new username is available)
 
     def change_password(self, old, new):
-        self.password = new
+        if hash(old) == self.password:
+            self.password = hash(new)
+        else:
+            print("Incorrect old password!")
 
     def password_match(self, attempt):
         return self.password == hash(attempt)
+
+    def enter_group(self, group):
+        self.groups.append(group)
+        group.add_user(self)
+
 
     # def load_json_dict(self, json_dict):
     #     self.username = json_dict["username"]
