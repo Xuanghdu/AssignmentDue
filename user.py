@@ -31,15 +31,24 @@ class User():
         return self.password == hash(attempt)
 
     def enter_group(self, group):
-        self.groups.append(group)
-        group.add_user(self)
+        if group not in self.groups:
+            self.groups.append(group)
+            group.add_user(self)
+        else:
+            print("You are already in " + group.groupname)
 
     def invite(self, user, group):
-        user.groups.append(group)
-        group.add_user(user)
+        if group not in self.groups:
+            user.groups.append(group)
+            group.add_user(user)
+        else:
+            print(user.username + " is already in " + group.groupname)
 
     def create_task(self, group, task):
-        group.create_task(task)
+        if task not in group.tasks:
+            group.create_task(task)
+        else:
+            print(task.taskname + " is already in " + group.groupname)
 
     def complete_task(self, group, task):
         group.complete_task(task)
