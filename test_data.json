@@ -19,14 +19,14 @@
             "group": "2",
             "content": "Finish the NewHack",
             "due_date": [2020, 3, 7],
-            "stakeholders": [["4", "8", "12"], ["16"], ["20", "24"]]
+            "divisions": [["4", "8", "12"], ["16"], ["20", "24"]]
         },
         "2": {
             "uuid": "5",
             "group": "6",
             "content": "Go to ChestNut",
             "due_date": null,
-            "stakeholders": [["0", "4"]]
+            "divisions": [["0", "4"]]
         }
     },
     "groups": {

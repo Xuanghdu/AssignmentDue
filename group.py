@@ -16,6 +16,7 @@ class Group:
         self.tasks.append(task)
 
     def complete_task(self, task, user):
+        # TODO: need rework since should edit task divisions instead of removing the task directly
         # user unused
         self.tasks.remove(task)
         self.trash.append(task)
@@ -29,7 +30,7 @@ class Group:
 
     # def update_group(self):
     #     for task in self.tasks:
-    #         for user in task.stakeholders:
+    #         for user in task.divisions:
     #             if user not in self.user_to_task.keys():
     #                 self.user_to_task[user] = set()
     #             self.user_to_task[user].add(task)
