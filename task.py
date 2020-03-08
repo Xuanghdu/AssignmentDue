@@ -7,10 +7,10 @@ from datetime import datetime
 class Task():
 
     __slots__ = 'taskname', 'description', 'group', 'due_date', 'divisions', \
-        'dependencies', 'timestamp', 'add_date'
+        'dependencies', 'timestamp', 'add_date', 'last_modified'
 
-    def __init__(self, taskname, description, group, due_date=None,
-                 divisions=[], dependencies=[]):
+    def __init__(self, taskname, description, group, due_date=[1999, 12, 31],
+                 divisions=[], dependencies=[], add_date=None):
         # super.__init__()
         self.taskname = taskname
         self.description = description
@@ -20,7 +20,11 @@ class Task():
         self.dependencies = dependencies
         now = datetime.now()
         self.timestamp = now.timestamp()
-        self.add_date = now.utctimetuple()[:5]
+        if add_date == None:
+            self.add_date = now.utctimetuple()[:5]
+        else:
+            self.add_date = add_date
+        self.last_modified = self.add_date
 
     def __iter__(self):
         for division in self.divisions:
@@ -71,8 +75,9 @@ class Task():
         del self.divisions[index]
 
     def __str__(self):
-        return 'taskname: %s\ndescription: %s\ndue date: %S\nadd date: %S' % \
-            (self.taskname, self.description, self.due_date, self.add_date)
+        return 'taskname: %s\ndescription: %s\ndue date: %s\nadd date: %S' % \
+            (self.taskname, self.description,
+             '/'.join(self.due_date), self.add_date)
 
     # def load_json_dict(self, load_json_dict):
     #     self.group = load_json_dict["group"]
