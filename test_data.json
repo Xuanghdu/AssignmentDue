@@ -3,7 +3,14 @@
         "0": {
             "uuid": "0",
             "username": "Yunhao Qian",
-            "password": "08221018"
+            "password": "08221018",
+            "groups": ["2", "6"]
+        },
+        "1": {
+            "uuid": "4",
+            "username": "Yanjia Zhu",
+            "password": "10180822",
+            "groups": ["6", "10"]
         }
     },
     "tasks": {
@@ -13,6 +20,13 @@
             "content": "Finish the NewHack",
             "due_date": [2020, 3, 7],
             "stakeholders": [["4", "8", "12"], ["16"], ["20", "24"]]
+        },
+        "2": {
+            "uuid": "5",
+            "group": "6",
+            "content": "Go to ChestNut",
+            "due_date": null,
+            "stakeholders": [["0", "4"]]
         }
     },
     "groups": {
@@ -24,6 +38,14 @@
                 "0": ["1", "5"],
                 "4": ["1", "9"],
                 "8": ["5", "9"]
+            }
+        },
+        "6": {
+            "uuid": "6",
+            "tasks": ["5", "13"],
+            "users": ["0"],
+            "user_to_task": {
+                "0": ["1", "5"]
             }
         }
     }
