@@ -42,6 +42,10 @@ def display_login_page():
 def login_button_pressed(username, password):
     global username_to_user
     global navigation_stack
+    if username == "" or password == "":
+        messagebox.showinfo("Login failed",
+                            "Username or password cannot be empty")
+        return
     if username not in username_to_user:
         messagebox.showinfo("Login failed", "Username not found")
         return
@@ -82,6 +86,10 @@ def register_button_pressed(username, password, confirm_password):
         messagebox.showinfo("Register failed",
                             "Password and confirm does not match")
         return
+    if username == "" or password == "":
+        messagebox.showinfo("Register failed",
+                            "Username or password cannot be empty")
+        return
     if username in username_to_user.keys():
         messagebox.showinfo("Register failed",
                             "Username has been used by another account")
@@ -93,32 +101,61 @@ def register_button_pressed(username, password, confirm_password):
 
 def display_user_page():
     global window
+    global navigation_stack
     assert(isinstance(navigation_stack[-1], User))
     user = navigation_stack[-1]
     if window != None:
         window.destroy()
     window = Tk()
     window.title(user.username)
-    box = Listbox()
+    row_count = 0
     for group in user.groups:
-        box.insert(END, group.groupname)
-    box.pack()
+        Button(text=group.groupname,
+               command=lambda: group_button_pressed(group)).grid(
+                   row=row_count, column=0, columnspan=2)
+        row_count += 1
+    Button(text="Logout", command=logout_pressed).grid(row=row_count, column=0)
+    Button(text="Create group", command=create_group_pressed).grid(
+        row=row_count, column=1)
     window.mainloop()
+
+
+def logout_pressed():
+    global navigation_stack
+    assert(isinstance(navigation_stack[-1], User))
+    navigation_stack.pop()
+    display_login_or_register_page()
+
+
+def create_group_pressed():
+    pass
+
+
+def group_button_pressed(group):
+    pass
 
 
 def display_group_page():
     global window
+    global navigation_stack
     assert(isinstance(navigation_stack[-1], Group))
     group = navigation_stack[-1]
     if window != None:
         window.destroy()
     window = Tk()
     window.title(group.groupname)
-    box = Listbox()
     for task in group.tasks:
-        box.insert(task.taskname)
-    box.pack()
+        Button(text=task.taskname,
+               command=lambda: task_button_pressed(task)).grid()
     window.mainloop()
+
+
+def task_button_pressed(task):
+    pass
+
+
+def display_task_page():
+    pass
 
 
 if __name__ == "__main__":
