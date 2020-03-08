@@ -4,11 +4,11 @@ from task import Task
 from group import Group
 import os
 
-def register(username_to_users):
+def register(username_to_user):
     while True:
         while True:
             username = input('username: ')
-            if username in username_to_users:
+            if username in username_to_user:
                 print('Sorry, this username has already been taken!')
             else: break
         while True:
@@ -24,24 +24,24 @@ def register(username_to_users):
             print('1. Confirm')
             print('2. Deny')
             confirm = input('')
-            if confirm == '1': return user_name,password
+            if confirm == '1': return username,password
             elif confirm == '2': break
             else: continue
 
-def signin(username_to_users):
+def signin(username_to_user):
     while True:
         username = input('username: ')
         password = input('password: ')
-        if username not in username_to_users :
+        if username not in username_to_user :
             print('Invalid username or password')
         else:
-            user = username_to_users[username]
+            user = username_to_user[username]
             if not user.check_password(password):
                 print('Invalid username or password')
             else: break        
     return user
 
-def main_page(username_to_users,groupname_to_groups):
+def main_page(username_to_user,groupname_to_group):
     while True:
         os.system('clear')
         print("Welcome,", current_user.username)
@@ -56,21 +56,22 @@ def main_page(username_to_users,groupname_to_groups):
         print(" 2. Settings")
         print(" 3. Log Out")
         option = input('Enter an option')
-        if   option == "1": choose_group(current_user, username_to_users,groupname_to_groups)
-        elif option == "2": create_group(current_user, username_to_users,groupname_to_groups)
-        elif option == "3": the_settings(current_user, username_to_users,groupname_to_groups)
+        if   option == "1": choose_group(current_user, username_to_user,groupname_to_group)
+        elif option == "2": create_group(current_user, username_to_user,groupname_to_group)
+        elif option == "3": the_settings(current_user, username_to_user,groupname_to_group)
         elif option == "4": exit()
-        else: print('Please Enter a valid option:')   
+        else: print('Please Enter a valid option:'); continue
 
-def choose_group(current_user, username_to_users,groupname_to_groups):
+
+def choose_group(current_user, username_to_user,groupname_to_group):
     while True:
         groupname = input("Enter a group: ")
-        if groupname not in groupname_to_groups:
+        if groupname not in groupname_to_group:
             print("Group cannot be found, please enter an existing group.")
             continue
         else:
             while True:
-                current_group = groupname_to_groups[groupname]
+                current_group = groupname_to_group[groupname]
                 print("Options: ")
                 print(" 1. Create a task")
                 print(" 2. View a task")
@@ -80,24 +81,98 @@ def choose_group(current_user, username_to_users,groupname_to_groups):
                 print(" 6. Return to main page")
                 option = input("Enter an option: ") 
                 if option == "1": 
-                    create_task(current_user, username_to_users, current_group, groupname_to_groups)
+                    create_task(current_user, username_to_user, current_group, groupname_to_group)
                 elif option == "6": return
-                else: print('Please Enter a valid option:')   
+                else: print('Please Enter a valid option:'); continue
             
-def create_task(current_user, username_to_users, current_group, groupname_to_groups):
+def create_task(current_user, username_to_user, current_group, groupname_to_group):
+    taskname = None
+    due_date = None
+    description = None 
+    divisions = []
     while True:
-        taskname = input('task name: ')
-        if taskname not in current_group.tasks:
+        print("Options: ")
+        print(" 1. task name: " + str(taskname))
+        print(" 2. due date: " + '/'.join(due_date))
+        print(" 3. description: " + str(description))
+        print(" 4. divisions: " +'\n    '.join(divisions))
+        print(" 5. confirm task")
+        print(" 6. Return to main group")
+        option = input("Enter an option: ") 
+        if option == "1":
+            while True:
+                new_taskname = input('task name: ')
+                if new_taskname in current_group.tasks:
+                    print("The task "+taskname+" has already existed, please enter a different task.")
+                else: 
+                    confirm = input('Update task name? y/n')
+                    if confirm == "y": 
+                        taskname = new_taskname 
+                    break
+        elif option == "2":
+            while True:
+                new_due_date = input('due date(YYYY/MM/DD/hh/mm): ')
+                try:
+                    new_due_date = new_due_date.split('/')
+                    confirm = input('Update due date? y/n')
+                    if confirm == "yes": 
+                        due_date = new_due_date 
+                    break
+                except:
+                    print("The due date is invalid.")
+        elif option == "3":
+            new_description = input('task description: ')
+            confirm = input('Update task description? y/n')
+            if confirm == "y": 
+                description = new_description
+            break
+        elif option == "4":
+            while True:
+                print('Current divisions has: ')
+                for d in divisions: 
+                    print(', '.join([u_.usernames for u_ in d]))
+                print("Group Members")
+                for i, u in enumerate(current_group.users):
+                    print(i,".",u.username)
+                usernames = input("Please choose a divition from group members(i.e. a,b,c): ")
                 
+                try:
+                    usernames = usernames.split(',')
+                    add = input('Adding '+ usernames + " as one division? y/n")
+                    if add == 'n': continue
+                except:
+                    print('Some usernames are not in the group')
+
+                users_ = set([username_to_user[username_] for username_ in usernames])
+                divisions.append(users_)
+                print('Current divisions has: ')
+                for d in divisions: 
+                    print(', '.join([u_.usernames for u_ in d]))
+                confirm_division = input('Add more divisions? y/n')
+                if confirm_division == 'y': continue
+
+        elif option == "5":
+            confirm = input('Create the task? y/n')
+            if confirm == "n": continue 
+            else:
+                current_task = Task(taskname,description,current_group,due_date,divisions)
+                current_user.add_task(current_group,current_task)
+                current_group.add_task(current_task)
+                break
+        elif option == "6":
+            return
+        else: print('Please Enter a valid option:'); continue
+
+
     return current_task
-def create_group(current_user, username_to_users,groupname_to_groups):
+def create_group(current_user, username_to_user,groupname_to_group):
     pass
-def the_settings(current_user, username_to_users,groupname_to_groups):
+def the_settings(current_user, username_to_user,groupname_to_group):
     # TODO: change user, change password
     pass
 
-username_to_users = {'name': 1}
-groupname_to_groups = {'groupname':'g'}
+username_to_user = {'name': 1}
+groupname_to_group = {'groupname':'g'}
 current_user = None
 
 while True:
@@ -108,10 +183,10 @@ while True:
     choice = input("choose a number:\n")
 
     if choice == '1':
-        username,password = register(username_to_users)
+        username,password = register(username_to_user)
         current_user = User(username,password)
     elif choice == '2':
-        current_user = signin(username_to_users)
+        current_user = signin(username_to_user)
 
         
 
