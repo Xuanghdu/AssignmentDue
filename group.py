@@ -1,45 +1,33 @@
 class Group:
 
-    __slots__ = 'tasks', 'users', 'user_to_task'
+    __slots__ = 'groupname', 'tasks', 'users', 'user_to_task', 'trash'
 
-    def __init__(self, tasks=set(), users=set()):
-        '''
-        params:
-            tasks set<task.obj>
-            users set<user.obj>
-        attributs:
-            self.tasks set<task.obj>
-            self.users set<task.obj>
-            self.user_to_task = <dict>
-        '''
-        self.tasks = tasks
+    def __init__(self, groupname, users=[], tasks=[], trash=[]):
+        self.groupname = groupname
         self.users = users
-        self.user_to_task = dict()
+        self.tasks = tasks
+        self.trash = trash
+        # self.user_to_task = dict()
 
     def add_user(self, user):
-        '''
-        user.obj -> None
-        '''
-        self.users.add(user)
+        self.users.append(user)
 
-    def add_task(self, task):
-        '''
-        task.obj -> None
-        '''
-        self.tasks.add(task)
+    def create_task(self, task):
+        self.tasks.append(task)
 
-    def update_group(self):
-        '''
-        update the user_to_task dictionary
-        '''
-        for task in self.tasks:
-            for user in task.stakeholders:
-                if user not in self.user_to_task.keys():
-                    self.user_to_task[user] = set()
-                self.user_to_task[user].add(task)
+    def complete_task(self, task):
+        self.tasks.remove(task)
+        self.trash.append(task)
+
+    # def update_group(self):
+    #     for task in self.tasks:
+    #         for user in task.stakeholders:
+    #             if user not in self.user_to_task.keys():
+    #                 self.user_to_task[user] = set()
+    #             self.user_to_task[user].add(task)
 
 
     def __str__(self):
         return "tasks:" + str(self.tasks) + \
-             "\nusers:" + str(self.users) + \
-      "\nuser_to_task:" + str(self.user_to_task)
+             "\nusers:" + str(self.users) # + \
+    #   "\nuser_to_task:" + str(self.user_to_task)
