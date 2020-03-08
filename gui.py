@@ -1,13 +1,34 @@
-import tkinter
+from tkinter import *
 
 window = None
-navigation_stack = [] # user -> group -> task
+navigation_stack = []  # user -> group -> task
+
+
+def display_login_or_register_page():
+    global window
+    if window != None:
+        window.destroy()
+    window = Tk()
+    window.title("Login or Register")
+    Button(text="Login").pack()
+    Button(text="Register").pack()
+    window.mainloop()
+
 
 def display_login_page():
-    window.distroy()
+    global window
+    if window != None:
+        window.destroy()
+    window = Tk()
+    window.title("Login")
+    username = StringVar()
+    password = StringVar()
+    Label("Username").pack()
+    Entry(textvariable=username).pack()
+    Label("Password").pack()
+    Entry(textvariable=password).pack()
+
 
 if __name__ == "__main__":
-    ad = tkinter.Tk()
-    button = tk.Button(ad, text='stop', width=25, command=ad.destroy)
-    button.pack()
-    ad.mainloop()
+    display_login_or_register_page()
+    display_login_page()

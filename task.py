@@ -10,7 +10,7 @@ class Task():
         'dependencies', 'timestamp', 'add_date'
 
     def __init__(self, taskname, description, group, due_date=None,
-                 divisions=[set()], dependencies=[]):
+                 divisions=[], dependencies=[]):
         # super.__init__()
         self.taskname = taskname
         self.description = description
