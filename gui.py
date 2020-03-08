@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from user import User
 from group import Group
+from task import Task
 
 username_to_user = {}
 groupname_to_group = {}
@@ -32,7 +33,7 @@ def display_login_page():
     Label(text="Username:").grid(row=0, column=0)
     Entry(textvariable=username).grid(row=0, column=1)
     Label(text="Password:").grid(row=1, column=0)
-    Entry(textvariable=password).grid(row=1, column=1)
+    Entry(textvariable=password, show="*").grid(row=1, column=1)
     Button(text="Login", command=lambda: login_pressed(
         username.get(), password.get())).grid(row=2, column=0)
     Button(text="Cancel", command=display_login_or_register_page).grid(
@@ -70,9 +71,9 @@ def display_register_page():
     Label(text="Username:").grid(row=0, column=0)
     Entry(textvariable=username).grid(row=0, column=1)
     Label(text="Password:").grid(row=1, column=0)
-    Entry(textvariable=password).grid(row=1, column=1)
+    Entry(textvariable=password, show="*").grid(row=1, column=1)
     Label(text="Confirm password:").grid(row=2, column=0)
-    Entry(textvariable=confirm_password).grid(row=2, column=1)
+    Entry(textvariable=confirm_password, show="*").grid(row=2, column=1)
     Button(text="Register", command=lambda: register_pressed(
         username.get(), password.get(), confirm_password.get())).grid(
             row=3, column=0)
@@ -120,7 +121,6 @@ def display_user_page():
            command=lambda: display_create_group_page(user)).grid(
                row=row_count, column=1)
     window.mainloop()
-    window.mainloop()
 
 
 def logout_pressed():
@@ -145,7 +145,7 @@ def display_create_group_page(user):
     window = Tk()
     window.title("Create Group")
     groupname = StringVar()
-    Label(text="Groupname").grid(row=0, column=0)
+    Label(text="Groupname:").grid(row=0, column=0)
     Entry(textvariable=groupname).grid(row=0, column=1)
     Button(text="Create Group", command=lambda: create_group_pressed(
         user, groupname.get())).grid(row=1, column=0)
@@ -206,7 +206,49 @@ def task_button_pressed(task):
 
 
 def display_create_task_page():
-    pass
+    global navigation_stack
+    global window
+    assert(isinstance(navigation_stack[-1], Group))
+    if window != None:
+        window.destroy()
+    window = Tk()
+    window.title("Create Task")
+    taskname = StringVar()
+    description = StringVar()
+    due_date = StringVar()
+    Label(text="Taskname:").grid(row=0, column=0)
+    Entry(textvariable=taskname).grid(row=0, column=1)
+    Label(text="Description:").grid(row=1, column=0)
+    Entry(textvariable=description).grid(row=1, column=1)
+    Label(text="Due date:").grid(row=2, column=0)
+    Entry(textvariable=due_date).grid(row=2, column=1)
+    Button(text="Create task", command=lambda: create_task_pressed(
+        taskname.get(), description.get(), due_date.get())).grid(
+            row=3, column=0)
+    Button(text="Cancel", command=display_group_page).grid(row=3, column=1)
+    window.mainloop()
+
+
+def create_task_pressed(taskname, description, due_date):
+    global navigation_stack
+    assert(isinstance(navigation_stack[-1], Group))
+    group = navigation_stack[-1]
+    if taskname == "":
+        messagebox.showinfo("Create task failed",
+                            "Taskname or description cannot be empty")
+        return
+    due_date_list = due_date.strip().split('/')
+    try:
+        assert len(due_date_list) == 3
+        for i in range(3):
+            due_date_list[i] = int(due_date_list[i].strip())
+    except:
+        messagebox.showinfo("Create task failed",
+                            "Invalid due date format")
+        return
+    task = Task(taskname, description, group, due_date_list)
+    group.add_task(task)
+    display_group_page()
 
 
 def display_invite_page():
@@ -215,8 +257,29 @@ def display_invite_page():
 
 def display_task_page():
     global navigation_stack
-    assert(isinstance(navigation_stack[-1], Group))
-    group = 
+    global window
+    assert(isinstance(navigation_stack[-1], Task))
+    task = navigation_stack[-1]
+    if window != None:
+        window.destroy()
+    window = Tk()
+    window.title(task.taskname)
+    Label(text="Taskname:").grid(row=0, column=0)
+    Label(text=task.taskname).grid(row=0, column=1)
+    Label(text="Description:").grid(row=1, column=0)
+    Label(text=task.description).grid(row=1, column=1)
+    Label(text="Due date: ").grid(row=2, column=0)
+    Label(text='/'.join([str(d) for d in task.due_date])).grid(row=2, column=1)
+    Button(text="Back", command=task_page_back_pressed).grid(
+        row=3, column=0, columnspan=2)
+    window.mainloop()
+
+
+def task_page_back_pressed():
+    global navigation_stack
+    assert(isinstance(navigation_stack[-1], Task))
+    navigation_stack.pop()
+    display_group_page()
 
 
 if __name__ == "__main__":
