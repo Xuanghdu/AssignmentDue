@@ -1,12 +1,13 @@
 # from base import Base
 
 
-class Task(Base):
+# class Task(Base):
+class Task():
 
     __slots__ = 'group', 'content', 'due_date', 'stakeholders'
 
     def __init__(self, group, content, due_date=None, stakeholders=[]):
-        super.__init__()
+        # super.__init__()
         self.group = group
         self.content = content
         self.due_date = due_date

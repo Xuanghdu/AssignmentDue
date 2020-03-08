@@ -7,7 +7,7 @@ class User():
     __slots__ = 'username', 'password', 'groups'
 
     def __init__(self, username, password, groups=[]):
-        super.__init__()
+        # super.__init__()
         self.username = username
         self.password = hash(password)
         self.groups = groups
@@ -51,8 +51,13 @@ class User():
             # print(task.taskname + " is already in " + group.groupname)
 
     def complete_task(self, group, task):
-        group.complete_task(task)
+        group.complete_task(task, self)
 
+    def delete_task(self, group, task):
+        group.delete_task(task)
+
+    def restore_task(self, group, task):
+        group.restore_task(task)
 
     # def load_json_dict(self, json_dict):
     #     self.username = json_dict["username"]

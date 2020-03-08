@@ -15,9 +15,17 @@ class Group:
     def create_task(self, task):
         self.tasks.append(task)
 
-    def complete_task(self, task):
+    def complete_task(self, task, user):
+        # user unused
         self.tasks.remove(task)
         self.trash.append(task)
+
+    def delete_task(self, task):
+        self.tasks.remove(task)
+
+    def restore_task(self, task):
+        self.trash.remove(task)
+        self.tasks.append(task)
 
     # def update_group(self):
     #     for task in self.tasks:
