@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from user import User
 from group import Group
 
@@ -14,8 +15,8 @@ def display_login_or_register_page():
         window.destroy()
     window = Tk()
     window.title("Login or Register")
-    Button(text="Login").pack()
-    Button(text="Register").pack()
+    Button(text="Login", command=display_login_page).pack()
+    Button(text="Register", command=display_register_page).pack()
     window.mainloop()
 
 
@@ -31,8 +32,25 @@ def display_login_page():
     Entry(textvariable=username).grid(row=0, column=1)
     Label(text="Password:").grid(row=1, column=0)
     Entry(textvariable=password).grid(row=1, column=1)
-    Button(text="Login").grid(row=2, column=0, columnspan=2)
+    Button(text="Login", command=lambda: login_button_pressed(
+        username.get(), password.get())).grid(row=2, column=0)
+    Button(text="Cancel", command=display_login_or_register_page).grid(
+        row=2, column=1)
     window.mainloop()
+
+
+def login_button_pressed(username, password):
+    global username_to_user
+    global navigation_stack
+    if username not in username_to_user:
+        messagebox.showinfo("Login failed", "Username not found")
+        return
+    user = username_to_user[username]
+    if not user.check_password(password):
+        messagebox.showinfo("Login failed", "Incorrect password")
+        return
+    navigation_stack.append(user)
+    display_user_page()
 
 
 def display_register_page():
@@ -50,8 +68,27 @@ def display_register_page():
     Entry(textvariable=password).grid(row=1, column=1)
     Label(text="Confirm password:").grid(row=2, column=0)
     Entry(textvariable=confirm_password).grid(row=2, column=1)
-    Button(text="Login").grid(row=3, column=0, columnspan=2)
+    Button(text="Register", command=lambda: register_button_pressed(
+        username.get(), password.get(), confirm_password.get())).grid(
+            row=3, column=0)
+    Button(text="Cancel", command=display_login_or_register_page).grid(
+        row=3, column=1)
     window.mainloop()
+
+
+def register_button_pressed(username, password, confirm_password):
+    global username_to_user
+    if password != confirm_password:
+        messagebox.showinfo("Register failed",
+                            "Password and confirm does not match")
+        return
+    if username in username_to_user.keys():
+        messagebox.showinfo("Register failed",
+                            "Username has been used by another account")
+        return
+    username_to_user[username] = User(username, password)
+    messagebox.showinfo("Register success", "Register success")
+    display_login_page()
 
 
 def display_user_page():
@@ -85,6 +122,6 @@ def display_group_page():
 
 
 if __name__ == "__main__":
-    # display_login_or_register_page()
+    display_login_or_register_page()
     # display_login_page()
-    display_register_page()
+    # display_register_page()
