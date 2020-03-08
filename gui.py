@@ -252,7 +252,39 @@ def create_task_pressed(taskname, description, due_date):
 
 
 def display_invite_page():
-    pass
+    global navigation_stack
+    global window
+    assert(isinstance(navigation_stack[-1], Group))
+    group = navigation_stack[-1]
+    if window != None:
+        window.destroy()
+    window = Tk()
+    window.title("Invite")
+    username = StringVar()
+    Label(text="Username:").grid(row=0, column=0)
+    Entry(textvariable=username).grid(row=0, column=1)
+    Button(text="Invite", command=lambda: invite_pressed(
+        group, username.get())).grid(row=1, column=0)
+    Button(text="Cancel", command=display_group_page).grid(row=1, column=1)
+    window.mainloop()
+
+
+def invite_pressed(group, username):
+    global username_to_user
+    if username == "":
+        messagebox.showinfo("Invite failed", "Username cannot be empty")
+        return
+    if username not in username_to_user:
+        messagebox.showinfo("Invite failed", "Username not found")
+        return
+    user = username_to_user[username]
+    if user in group.users:
+        messagebox.showinfo("Do nothing", "User already in the group")
+        display_group_page()
+        return
+    user.enter_group(group)
+    messagebox.showinfo("Invite success", "Invite success")
+    display_group_page()
 
 
 def display_task_page():
