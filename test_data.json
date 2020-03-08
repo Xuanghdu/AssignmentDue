@@ -1,0 +1,30 @@
+{
+    "users": {
+        "0": {
+            "uuid": "0",
+            "username": "Yunhao Qian",
+            "password": "08221018"
+        }
+    },
+    "tasks": {
+        "1": {
+            "uuid": "1",
+            "group": "2",
+            "content": "Finish the NewHack",
+            "due_date": [2020, 3, 7],
+            "stakeholders": [["4", "8", "12"], ["16"], ["20", "24"]]
+        }
+    },
+    "groups": {
+        "2": {
+            "uuid": "2",
+            "tasks": ["1", "5", "9"],
+            "users": ["0", "4", "8"],
+            "user_to_task": {
+                "0": ["1", "5"],
+                "4": ["1", "9"],
+                "8": ["5", "9"]
+            }
+        }
+    }
+}
