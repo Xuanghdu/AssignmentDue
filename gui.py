@@ -65,8 +65,8 @@ def login_pressed(username, password):
         messagebox.showinfo("Login failed", "Username not found")
         return
     user = username_to_user[username]
-    print("user: {} id: {} groups: {}".format(
-        user.username, id(user), id(user.groups)))
+    # print("user: {} id: {} groups: {}".format(
+    #     user.username, id(user), id(user.groups)))
     if not user.check_password(password):
         messagebox.showinfo("Login failed", "Incorrect password")
         return
